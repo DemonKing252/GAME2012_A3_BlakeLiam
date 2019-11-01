@@ -1,0 +1,4 @@
+﻿  BL-101171612-Assignment3.cpp
+c:\users\owner\desktop\game2012_a3_blakeliam\firstexample\bl-101171612-assignment3.cpp(550): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\owner\desktop\game2012_a3_blakeliam\firstexample\bl-101171612-assignment3.cpp(551): warning C4244: '=': conversion from 'int' to 'GLfloat', possible loss of data
+  FirstExample.vcxproj -> C:\Users\Owner\Desktop\GAME2012_A3_BlakeLiam\Debug\FirstExample.exe
