@@ -273,6 +273,7 @@ void init(void)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_indices), cube_indices, GL_STATIC_DRAW);
 
+
 	points_vbo = 0;
 	glGenBuffers(1, &points_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
@@ -284,8 +285,8 @@ void init(void)
 	glGenBuffers(1, &cube_colours_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, cube_colours_vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colours2), colours2, GL_STATIC_DRAW);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glEnableVertexAttribArray(1);
 	
 
 	rubicksCubeTexture = SOIL_load_image("rubiksCube.png", &width, &height, 0, SOIL_LOAD_RGB);
@@ -300,8 +301,11 @@ void init(void)
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glUniform1i(glGetUniformLocation(program, "texture0"), 0);
-
+	glGenBuffers(1, &cube_tex_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, cube_tex_vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(2);
 	//////////////////////////////////////////////////////////////////////////////////////////////
 
 	bonus_vao = 0;
@@ -326,18 +330,10 @@ void init(void)
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(1);
 
-	glGenBuffers(1, &cube_tex_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, cube_tex_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(2);
-
-	
 	//GLint width, height;
 	pyramidTexture = SOIL_load_image("bonusTexture.png", &width, &height, 0, SOIL_LOAD_RGB);
 	//GLuint cube_tex = 0;
 	glGenTextures(1, &pyramid_tex);
-	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, pyramid_tex);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pyramidTexture);
 
@@ -345,11 +341,11 @@ void init(void)
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
+	//glUniform1i(glGetUniformLocation(program, "texture"), 0);
 
 	glGenBuffers(1, &pyramid_tex_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, pyramid_tex_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(bonusCoordinates), bonusCoordinates, GL_STATIC_DRAW);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(2);
 
@@ -395,13 +391,6 @@ void transformObject(float scale, glm::vec3 rotationAxis, float rotationAngle, g
 void display(void)
 {
 
-	static int i;
-	i++;
-	if (i <= 1)
-	{
-		rubicksCubeTexture = SOIL_load_image("rubiksCube.png", &width, &height, 0, SOIL_LOAD_RGB);
-		pyramidTexture = SOIL_load_image("bonusTexture.png", &width2, &height2, 0, SOIL_LOAD_RGB);
-	}
 
 	view = glm::lookAt(// 25 37.5
 		glm::vec3(cameraX, cameraY, cameraZ + 17.5),		// Camera pos in World Space
@@ -418,17 +407,12 @@ void display(void)
 	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 	static GLfloat oppAngle = 0;
 	static GLfloat oppAngle2 = 0;
-	//glBindVertexArray(cube_vao);
 	oppAngle += 1.5f;
 	oppAngle2 -= 1.5f;
 
 	// Change vaos
 	glBindVertexArray(cube_vao); 
 	glBindTexture(GL_TEXTURE_2D, cube_tex);
-	glBindBuffer(GL_ARRAY_BUFFER, cube_tex_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
 
 
 	// Rubicks Cube #1
@@ -441,13 +425,9 @@ void display(void)
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	// Bonus Texture
-	glBindVertexArray(bonus_vao); // Change vaos
+	// Change vaos
+	glBindVertexArray(bonus_vao); 
 	glBindTexture(GL_TEXTURE_2D, pyramid_tex);
-	glBindBuffer(GL_ARRAY_BUFFER, pyramid_tex_vbo);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(bonusCoordinates), bonusCoordinates, GL_STATIC_DRAW);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 	transformObject(1.0f, Y_AXIS, oppAngle2, glm::vec3(0.0f, 3.0f, 0.0f));
 	glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_SHORT, 0);
