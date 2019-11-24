@@ -287,7 +287,6 @@ void init(void)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colours2), colours2, GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(1);
-	
 
 	rubicksCubeTexture = SOIL_load_image("rubiksCube.png", &width, &height, 0, SOIL_LOAD_RGB);
 	
@@ -295,7 +294,7 @@ void init(void)
 	glGenTextures(1, &cube_tex);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, cube_tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, rubicksCubeTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, rubicksCubeTexture);	
 	
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -307,7 +306,6 @@ void init(void)
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(2);
 	//////////////////////////////////////////////////////////////////////////////////////////////
-
 	bonus_vao = 0;
 	glGenVertexArrays(1, &bonus_vao);
 	glBindVertexArray(bonus_vao);
@@ -315,7 +313,7 @@ void init(void)
 	glGenBuffers(1, &ibo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(bonus_indices), bonus_indices, GL_STATIC_DRAW);
-
+		
 	points_vbo = 0;
 	glGenBuffers(1, &points_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
@@ -330,9 +328,9 @@ void init(void)
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(1);
 
-	//GLint width, height;
+	
 	pyramidTexture = SOIL_load_image("bonusTexture.png", &width, &height, 0, SOIL_LOAD_RGB);
-	//GLuint cube_tex = 0;
+
 	glGenTextures(1, &pyramid_tex);
 	glBindTexture(GL_TEXTURE_2D, pyramid_tex);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pyramidTexture);
@@ -341,7 +339,6 @@ void init(void)
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//glUniform1i(glGetUniformLocation(program, "texture"), 0);
 
 	glGenBuffers(1, &pyramid_tex_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, pyramid_tex_vbo);
